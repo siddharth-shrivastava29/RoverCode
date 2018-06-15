@@ -1,4 +1,4 @@
-%% title
+%%Pivot around center of rear axle line with all wheels spinning
 
 clc;
 clear all;
@@ -12,7 +12,6 @@ elseif strcmp(computer, 'GLNX86')
 elseif strcmp(computer, 'GLNXA64')
   lib_name = 'libdxl_x64_c';
 end
-%% title
 
 % Load Libraries
 if ~libisloaded(lib_name)
@@ -105,34 +104,41 @@ FLReset = 512; %7
 BRReset = 512; %5
 
 %GAIT ARRAYS
-FLE = [ FLExtendDown FLExtendUp FLExtendUp FLExtendDown FLExtendDown FLExtendDown FLExtendDown FLExtendDown FLExtendDown FLExtendDown FLExtendDown FLExtendDown FLExtendDown FLExtendDown FLExtendDown FLExtendDown]
-FRE = [ FRExtendDown FRExtendDown FRExtendDown FRExtendDown FRExtendDown FRExtendDown FRExtendDown FRExtendDown FRExtendDown FRExtendUp FRExtendUp FRExtendDown FRExtendDown FRExtendDown FRExtendDown FRExtendDown]
-BLE = [ BLExtendDown BLExtendDown BLExtendDown BLExtendDown BLExtendDown BLExtendUp BLExtendUp BLExtendDown BLExtendDown BLExtendDown BLExtendDown BLExtendDown BLExtendDown BLExtendDown BLExtendDown BLExtendDown]
-BRE = [ BRExtendDown BRExtendDown BRExtendDown BRExtendDown BRExtendDown BRExtendDown BRExtendDown BRExtendDown BRExtendDown BRExtendDown BRExtendDown BRExtendDown BRExtendDown BRExtendUp BRExtendUp BRExtendDown]
-FLR = [ FLReset FLReset FLPropel FLPropel FLReset FLReset FLReset FLReset FLReset FLReset FLReset FLReset FLReset FLReset FLReset FLReset]
-FRR = [ FRReset FRReset FRReset FRReset FRReset FRReset FRReset FRReset FRReset FRReset FRPropel FRPropel FRReset FRReset FRReset FRReset]
-BLR = [ BLReset BLReset BLReset BLReset BLReset BLReset BLPropel BLPropel BLReset BLReset BLReset BLReset BLReset BLReset BLReset BLReset]
-BRR = [ BRReset BRReset BRReset BRReset BRReset BRReset BRReset BRReset BRReset BRReset BRReset BRReset BRReset BRReset BRPropel BRPropel]
+FLE = [ FLExtendDown FLExtendUp FLExtendDown FLExtendUp]
+FRE = [ FRExtendUp FRExtendDown FRExtendUp FRExtendDown]
+BLE = [ BLExtendDown BLExtendUp BLExtendDown BLExtendUp]
+BRE = [ BRExtendUp BRExtendDown BRExtendUp BRExtendDown]
+FLR = [ FLPropel FLPropel FLPropel FLPropel]
+FRR = [ FRPropel FRPropel FRPropel FRPropel]
+BLR = [ BLPropel BLPropel BLPropel BLPropel]
+BRR = [ BRPropel BRPropel BRPropel BRPropel]
 
 %BEGIN ROVER EXECUTION
-write2ByteTxRx(port_num, PROTOCOL_VERSION, 1, ADDR_MX_GOAL_POSITION, FRExtendDown);
-write2ByteTxRx(port_num, PROTOCOL_VERSION, 2, ADDR_MX_GOAL_POSITION, BLExtendDown);
-write2ByteTxRx(port_num, PROTOCOL_VERSION, 3, ADDR_MX_GOAL_POSITION, FLExtendDown);
-write2ByteTxRx(port_num, PROTOCOL_VERSION, 4, ADDR_MX_GOAL_POSITION, BRExtendDown);
+pause(5);
+write2ByteTxRx(port_num, PROTOCOL_VERSION, 1, ADDR_MX_GOAL_POSITION, FRExtendUp);
+write2ByteTxRx(port_num, PROTOCOL_VERSION, 2, ADDR_MX_GOAL_POSITION, BLExtendUp);
+write2ByteTxRx(port_num, PROTOCOL_VERSION, 3, ADDR_MX_GOAL_POSITION, FLExtendUp);
+write2ByteTxRx(port_num, PROTOCOL_VERSION, 4, ADDR_MX_GOAL_POSITION, BRExtendUp);
 write2ByteTxRx(port_num, PROTOCOL_VERSION, 5, ADDR_MX_GOAL_POSITION, 512);
 write2ByteTxRx(port_num, PROTOCOL_VERSION, 7, ADDR_MX_GOAL_POSITION, 512);
 write2ByteTxRx(port_num, PROTOCOL_VERSION, 9, ADDR_MX_GOAL_POSITION, 512);
 write2ByteTxRx(port_num, PROTOCOL_VERSION, 11, ADDR_MX_GOAL_POSITION, 512);
 pause(2);
-write2ByteTxRx(port_num, PROTOCOL_VERSION, 6, ADDR_MX_GOAL_SPEED, 1374);
-write2ByteTxRx(port_num, PROTOCOL_VERSION, 8, ADDR_MX_GOAL_SPEED, 350);
-write2ByteTxRx(port_num, PROTOCOL_VERSION, 10, ADDR_MX_GOAL_SPEED, 1374);
+write2ByteTxRx(port_num, PROTOCOL_VERSION, 6, ADDR_MX_GOAL_SPEED, 1374); %BL
+write2ByteTxRx(port_num, PROTOCOL_VERSION, 8, ADDR_MX_GOAL_SPEED, 350); %FL
+write2ByteTxRx(port_num, PROTOCOL_VERSION, 10, ADDR_MX_GOAL_SPEED, 1374); %FR
 write2ByteTxRx(port_num, PROTOCOL_VERSION, 12, ADDR_MX_GOAL_SPEED, 350);
-pause(15);
+pause(5);
+write2ByteTxRx(port_num, PROTOCOL_VERSION, 6, ADDR_MX_GOAL_SPEED, 250); %BL
+write2ByteTxRx(port_num, PROTOCOL_VERSION, 8, ADDR_MX_GOAL_SPEED, 350); %FL
+write2ByteTxRx(port_num, PROTOCOL_VERSION, 10, ADDR_MX_GOAL_SPEED, 350); %FR
+write2ByteTxRx(port_num, PROTOCOL_VERSION, 12, ADDR_MX_GOAL_SPEED, 350); %BR
+
 
 %1474
-for x=1: +1: 40
-    z = 16
+
+for x=1: +1: 8
+    z = 4
     for i=1: +1: z
        
         disp( [ 'i = ' num2str( i ) '/' num2str( z ) '  of ' num2str( x ) '/4' ' - - - - - '])
@@ -146,13 +152,13 @@ for x=1: +1: 40
         write2ByteTxRx(port_num, PROTOCOL_VERSION, 7, ADDR_MX_GOAL_POSITION, FLR(i));
         write2ByteTxRx(port_num, PROTOCOL_VERSION, 9, ADDR_MX_GOAL_POSITION, FRR(i));
         write2ByteTxRx(port_num, PROTOCOL_VERSION, 11, ADDR_MX_GOAL_POSITION, BLR(i));
-        pause(.4);
+        pause(.2);
 
     end
 end
-
+%}
 % Disable Dynamixel Torque
-write1ByteTxRx(port_num, PROTOCOL_VERSION, 10, ADDR_MX_TORQUE_ENABLEWHEEL, TORQUE_DISABLE); %Disable
+write1ByteTxRx(port_num, PROTOCOL_VERSION, 10, ADDR_MX_TORQUE_ENABLEWHEEL, TORQUE_DISABLE);
 write1ByteTxRx(port_num, PROTOCOL_VERSION, 8, ADDR_MX_TORQUE_ENABLEWHEEL, TORQUE_DISABLE);
 write1ByteTxRx(port_num, PROTOCOL_VERSION, 6, ADDR_MX_TORQUE_ENABLEWHEEL, TORQUE_DISABLE);
 write1ByteTxRx(port_num, PROTOCOL_VERSION, 12, ADDR_MX_TORQUE_ENABLEWHEEL, TORQUE_DISABLE);

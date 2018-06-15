@@ -24,7 +24,7 @@ ADDR_MX_PRESENT_POSITION    = 36;
 
 PROTOCOL_VERSION            = 1.0;         
 BAUDRATE                    = 1000000;
-DEVICENAME                  = 'COM25';       % Port
+DEVICENAME                  = 'COM4';       % Port
 
 TORQUE_ENABLE               = 0;            % Value for enabling the torque on AX12A
 TORQUE_DISABLE              = 0;            % Value for disabling the torque on AX12A
@@ -125,10 +125,10 @@ write2ByteTxRx(port_num, PROTOCOL_VERSION, 6, ADDR_MX_GOAL_SPEED, 1374);
 write2ByteTxRx(port_num, PROTOCOL_VERSION, 8, ADDR_MX_GOAL_SPEED, 350);
 write2ByteTxRx(port_num, PROTOCOL_VERSION, 10, ADDR_MX_GOAL_SPEED, 1374);
 write2ByteTxRx(port_num, PROTOCOL_VERSION, 12, ADDR_MX_GOAL_SPEED, 350);
-pause(30);
+pause(15);
 
 %1474
-for x=1: +1: 20
+for x=1: +1: 40
     z = 16
     for i=1: +1: z
        
